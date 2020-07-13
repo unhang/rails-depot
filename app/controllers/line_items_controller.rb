@@ -32,7 +32,7 @@ class LineItemsController < ApplicationController
     respond_to do |format|
       if @line_item.save
         session[:counter] = nil;
-        format.html { redirect_to @line_item.cart, notice: 'Line item was successfully created.' }
+        format.html { redirect_to @line_item.cart }
         format.json { render :show, status: :created, location: @line_item }
       else
         format.html { render :new }
@@ -71,6 +71,7 @@ class LineItemsController < ApplicationController
       @line_item = LineItem.find(params[:id])
     end
 
+    # Never trust parameters from the scary internet, only allow the white
     # Only allow a list of trusted parameters through.
     def line_item_params
       params.require(:line_item).permit(:product_id, :cart_id)
