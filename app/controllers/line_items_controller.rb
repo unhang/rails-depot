@@ -20,20 +20,21 @@ class LineItemsController < ApplicationController
   end
 
   # GET /line_items/1/edit
-  def edit22
+  def edit
   end
 
   # POST /line_items
   # POST /line_items.json
   def create
-    product = Product.find(params[:product_id]) 
+    product = Product.find(params[:product_id])
+
     @line_item = @cart.add_product product
-    
+
     respond_to do |format|
       if @line_item.save
-        session[:counter] = nil;
-        format.html { redirect_to store_index_url }
-        format.js
+        session[:counter] = nil
+        format.html { redirect_to store_index_url}
+        format.js { @current_item = @line_item }
         format.json { render :show, status: :created, location: @line_item }
       else
         format.html { render :new }
@@ -67,14 +68,15 @@ class LineItemsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_line_item
-      @line_item = LineItem.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white
-    # Only allow a list of trusted parameters through.
-    def line_item_params
-      params.require(:line_item).permit(:product_id, :cart_id)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_line_item
+    @line_item = LineItem.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white
+  # Only allow a list of trusted parameters through.
+  def line_item_params
+    params.require(:line_item).permit(:product_id, :cart_id)
+  end
 end

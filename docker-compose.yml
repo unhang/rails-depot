@@ -1,0 +1,32 @@
+version: '3'
+services:
+  web: &web
+    tty: true
+    stdin_open: true
+    image: unhang/depot
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: sh docker/start.sh
+    entrypoint: []
+    volumes:
+      - .:/app:cached
+    ports:
+      - "3000:3000"
+#    env_file:
+#      - web.env
+    depends_on:
+      - db
+
+  webpack:
+    <<: *web
+    command: docker/start_webpack.sh
+    ports:
+      - "3035:3035"
+
+  db:
+    image: nouchka/sqlite3:latest
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./db/:/root/db/
